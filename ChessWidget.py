@@ -7,11 +7,11 @@ import math
 class ChessWidget(Widget):
     __events__ = ('on_user_move',)
 
-    def __init__(self, **kwargs):
+    def __init__(self, board=None, **kwargs):
         super().__init__(**kwargs)
+        self.board = board
         self.bind(size = self.on_size)
         self.bind(size = lambda *_: self.redraw())
-        #self.board = chess.Board()
         self.board_pos = None
         self.square_size = None
         self.xyo = [0, 0]   # xy origin for squares (not the board, which may include coords)

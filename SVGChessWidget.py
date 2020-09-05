@@ -34,14 +34,17 @@ class SVGChessWidget(ChessWidget):
             assert group == self.highlight
             group.add(Rectangle(pos=(x, y), size=(w, h)))
 
+    def gen_texture(self, piece):
+        size = self.square_size
+        svg = chess.svg.piece(piece)
+        png = cairosvg.svg2png(bytestring=svg, output_width=size, output_height=size, dpi=72)
+        return CoreImage(io.BytesIO(png), ext='png').texture
+
     def piece_texture(self, piece: chess.Piece):
-        tex = self.piece_tex.get(piece.symbol, None)
+        sym = piece.symbol()
+        tex = self.piece_tex.get(sym, None)
         if tex is None:
-            size = self.square_size
-            svg = chess.svg.piece(piece)
-            png = cairosvg.svg2png(bytestring=svg, output_width=size, output_height=size, dpi=72)
-            tex = CoreImage(io.BytesIO(png), ext='png').texture
-            self.piece_tex[piece.symbol] = tex
+            tex = self.piece_tex[sym] = self.gen_texture(piece)
         return tex
 
     def recalc(self, size):
