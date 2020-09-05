@@ -22,7 +22,7 @@ class SVGChessWidget(ChessWidget):
         if self.board_tex is None:
             svg = chess.svg.board(board=None, size=self.board_size)
             png = cairosvg.svg2png(bytestring=svg)
-            self.board_tex = CoreImage(io.BytesIO(png), ext='png').texture
+            self.board_tex = CoreImage(io.BytesIO(png), ext='png', dpi=72).texture
         return self.board_tex
 
     def highlight_area(self, group, i, x, y, w, h):
@@ -39,8 +39,9 @@ class SVGChessWidget(ChessWidget):
         if tex is None:
             size = self.square_size
             svg = chess.svg.piece(piece)
-            png = cairosvg.svg2png(bytestring=svg, output_width=size, output_height=size)
-            self.piece_tex[piece.symbol] = tex = CoreImage(io.BytesIO(png), ext='png').texture
+            png = cairosvg.svg2png(bytestring=svg, output_width=size, output_height=size, dpi=72)
+            tex = CoreImage(io.BytesIO(png), ext='png').texture
+            self.piece_tex[piece.symbol] = tex
         return tex
 
     def recalc(self, size):

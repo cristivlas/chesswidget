@@ -11,7 +11,7 @@ class ChessWidget(Widget):
         super().__init__(**kwargs)
         self.bind(size = self.on_size)
         self.bind(size = lambda *_: self.redraw())
-        self.board = chess.Board()
+        #self.board = chess.Board()
         self.board_pos = None
         self.square_size = None
         self.xyo = [0, 0]   # xy origin for squares (not the board, which may include coords)
@@ -40,8 +40,7 @@ class ChessWidget(Widget):
         self.recalc(size)
         self.redraw_board()
 
-    def update(self, fen, history, move):
-        self.board.set_fen(fen)
+    def update(self, move):
         self.redraw(move)
 
     def board_texture(self):
