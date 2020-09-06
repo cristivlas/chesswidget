@@ -2,7 +2,6 @@ from kivy.graphics import Color, Rectangle, InstructionGroup
 from kivy.uix.widget import Widget
 
 import chess
-import math
 
 class ChessWidget(Widget):
     __events__ = ('on_user_move',)
@@ -27,6 +26,10 @@ class ChessWidget(Widget):
             self.move += move
             if len(self.move) < 4:
                 self.highlight_move(move)
+            # click on a selected square? deselect it
+            elif self.move[:2] == self.move[2:]:
+                self.move = str()
+                self.highlight_move(self.move)
             elif self.dispatch('on_user_move', self.move):
                 self.move = str()
             else:
@@ -85,12 +88,13 @@ class ChessWidget(Widget):
             self.highlight_area(group, i, x, y, w+1, h+1)
         if self.canvas.indexof(group) < 0:
             self.canvas.add(group)
-        group.add(Color(*self.clear_color))
+        if group.children:
+            group.add(Color(*self.clear_color))
 
     def screen_coords(self, col, row):
         if isinstance(col, str):
             assert col in 'abcdefgh'    # expect file-rank
             assert int(row) in range(1, 9)
             col, row = 'abcdefgh'.index(col), int(row) - 1
-        return [math.ceil(o + i * self.square_size)-1 for o, i in zip(self.xyo, [col, row])]
+        return [o + i * self.square_size - 0.5 for o, i in zip(self.xyo, [col, row])]
 
