@@ -1,14 +1,12 @@
 from kivy.graphics import Color, Rectangle, InstructionGroup
 from kivy.uix.widget import Widget
 
-import chess
 
 class ChessWidget(Widget):
     __events__ = ('on_user_move',)
 
-    def __init__(self, board=None, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.board = board
         self.bind(size = self.on_size)
         self.bind(size = lambda *_: self.redraw())
         self.board_pos = None
@@ -18,6 +16,9 @@ class ChessWidget(Widget):
         self.selection = InstructionGroup()
         self.highlight = InstructionGroup()
         self.clear_color = (1,1,1,1)
+
+    def set_model(self, board):
+        self.piece_map = board.piece_map
 
     def on_touch_down(self, touch):
         x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
@@ -52,7 +53,7 @@ class ChessWidget(Widget):
     def highlight_area(self, group, i, x, y, w, h):
         pass
 
-    def piece_texture(self, piece: chess.Piece):
+    def piece_texture(self, piece):
         pass
 
     def recalc(self, size):
@@ -75,7 +76,7 @@ class ChessWidget(Widget):
             if move:
                 self.highlight_move(move.uci())
             size = 2 * [self.square_size]
-            for square, piece in self.board.piece_map().items():
+            for square, piece in self.piece_map().items():
                 x, y = self.screen_coords(square % 8, square // 8)
                 Rectangle(pos=(x, y), size=size, texture=self.piece_texture(piece))
 
