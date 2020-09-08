@@ -16,6 +16,13 @@ class ChessWidget(Widget):
         self.selection = InstructionGroup()
         self.highlight = InstructionGroup()
         self.clear_color = (1,1,1,1)
+        self.flip = 0
+
+    def rotate(self):
+        self.flip ^= 1
+        self.recalc(self.size)
+        self.redraw_board()
+        self.redraw()
 
     def set_model(self, board):
         self.piece_map = board.piece_map
@@ -23,6 +30,9 @@ class ChessWidget(Widget):
     def on_touch_down(self, touch):
         x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
         if 0 <= x < 8 and 0 <= y < 8:
+            if self.flip:
+                x = 8 - x
+                y = 8 - y
             move = 'abcdefgh'[int(x)] + str(1 + int(y))
             self.move += move
             if len(self.move) < 4:
@@ -77,8 +87,9 @@ class ChessWidget(Widget):
                 self.highlight_move(move.uci())
             size = 2 * [self.square_size]
             for square, piece in self.piece_map().items():
-                x, y = self.screen_coords(square % 8, square // 8)
-                Rectangle(pos=(x, y), size=size, texture=self.piece_texture(piece))
+                col, row = square % 8, square // 8
+                xy = self.screen_coords(col, row)
+                Rectangle(pos=(xy), size=size, texture=self.piece_texture(piece))
 
     def highlight_move(self, move):
         group = self.highlight if len(move) >= 4 else self.selection
@@ -97,5 +108,8 @@ class ChessWidget(Widget):
             assert col in 'abcdefgh'    # expect file-rank
             assert int(row) in range(1, 9)
             col, row = 'abcdefgh'.index(col), int(row) - 1
+        if self.flip:
+            col = 7 - col
+            row = 7 - row
         return [o + i * self.square_size - 0.5 for o, i in zip(self.xyo, [col, row])]
 

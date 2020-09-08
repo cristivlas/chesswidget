@@ -29,7 +29,7 @@ def gen_piece_atlas(name='pieces', dpi=72, size=72):
 
 
 def gen_board_img(fname='board.png', dpi=72, square_size=72):
-    svg = chess.svg.board(board=None, size=8*square_size)
+    svg = chess.svg.board(board=None, size=8*square_size, flipped=True)
     png = cairosvg.svg2png(bytestring=svg)
     Image.open(io.BytesIO(png)).save(fname, dpi=[dpi, dpi])
 

@@ -30,8 +30,12 @@ class AtlasChessWidget(ChessWidget):
 
     def board_texture(self):
         if self.board_tex is None:
-            self.board_tex = CoreImage(self.board).texture
+            self.board_tex = CoreImage(self.board + '-{}.png'.format(self.flip)).texture
         return self.board_tex
+
+    def rotate(self):
+        self.board_tex = None
+        super().rotate()
 
     def highlight_area(self, group, i, x, y, w, h):
         color = ['#aaa23b', '#cdd16a']

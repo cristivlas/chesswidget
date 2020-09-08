@@ -20,7 +20,7 @@ class SVGChessWidget(ChessWidget):
 
     def board_texture(self):
         if self.board_tex is None:
-            svg = chess.svg.board(board=None, size=self.board_size)
+            svg = chess.svg.board(board=None, size=self.board_size, flipped=self.flip)
             png = cairosvg.svg2png(bytestring=svg)
             self.board_tex = CoreImage(io.BytesIO(png), ext='png', dpi=72).texture
         return self.board_tex
@@ -54,3 +54,7 @@ class SVGChessWidget(ChessWidget):
         self.square_size = chess.svg.SQUARE_SIZE * self.scale
         self.board_pos = [(i - self.board_size) / 2 for i in size]
         self.xyo = [i + self.margin for i in self.board_pos]
+
+    def rotate(self):
+        self.board_tex = None
+        super().rotate()
