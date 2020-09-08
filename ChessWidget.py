@@ -111,5 +111,5 @@ class ChessWidget(Widget):
         if self.flip:
             col = 7 - col
             row = 7 - row
-        return [o + i * self.square_size - 0.5 for o, i in zip(self.xyo, [col, row])]
+        return [o + i * self.square_size for o, i in zip(self.xyo, [col, row])]
 

@@ -1,23 +1,13 @@
 from kivy.atlas import Atlas
 from kivy.core.image import Image as CoreImage
-from kivy.graphics import Color, Line, Rectangle
-from kivy.utils import get_color_from_hex
-from chesswidget.ChessWidget import ChessWidget
+from chesswidget.SVGChessWidget import SVGChessWidget
 from os import path
 
 import chess
-import chess.svg
 import sys
 
-SVG_MARGIN = 15
 
-
-class AtlasChessWidget(ChessWidget):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.board_tex = None
-        self.margin = SVG_MARGIN
-
+class AtlasChessWidget(SVGChessWidget):
     def set_textures(self, atlas, board):
         self.atlas = atlas + '.atlas'
         self.board = board
@@ -37,22 +27,5 @@ class AtlasChessWidget(ChessWidget):
         self.board_tex = None
         super().rotate()
 
-    def highlight_area(self, group, i, x, y, w, h):
-        color = ['#aaa23b', '#cdd16a']
-        group.add(Color(*get_color_from_hex(color[i])))
-        if group == self.selection:
-            group.add(Line(points=[x, y, x+w, y, x+w, y+h, x, y+h, x, y], width=3))
-        else:
-            assert group == self.highlight
-            group.add(Rectangle(pos=(x, y), size=(w, h)))
-
     def piece_texture(self, piece: chess.Piece):
         return self.atlas[piece.symbol()]
-
-    def recalc(self, size):
-        self.board_size = min(size)
-        self.scale = self.board_size / (2 * SVG_MARGIN + 8 * chess.svg.SQUARE_SIZE)
-        self.margin = SVG_MARGIN * self.scale
-        self.square_size = chess.svg.SQUARE_SIZE * self.scale
-        self.board_pos = [(i - self.board_size) / 2 for i in size]
-        self.xyo = [i + self.margin for i in self.board_pos]

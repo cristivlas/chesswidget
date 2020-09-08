@@ -3,10 +3,14 @@ from kivy.graphics import Color, Line, Rectangle
 from kivy.utils import get_color_from_hex
 
 from chesswidget.ChessWidget import ChessWidget
-import cairosvg
 import chess
 import chess.svg
 import io
+
+try:
+    import cairosvg
+except:
+    pass
 
 SVG_MARGIN = 15
 
