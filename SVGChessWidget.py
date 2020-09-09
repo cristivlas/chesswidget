@@ -12,8 +12,8 @@ try:
 except:
     pass
 
-SVG_MARGIN = 15
-
+SVG_MARGIN = 15.0
+SVG_SQUARE_SIZE = chess.svg.SQUARE_SIZE
 
 class SVGChessWidget(ChessWidget):
     def __init__(self, **kwargs):
@@ -53,9 +53,9 @@ class SVGChessWidget(ChessWidget):
 
     def recalc(self, size):
         self.board_size = min(size)
-        self.scale = self.board_size / (2 * SVG_MARGIN + 8 * chess.svg.SQUARE_SIZE)
+        self.scale = self.board_size / (2 * SVG_MARGIN + 8 * SVG_SQUARE_SIZE)
         self.margin = SVG_MARGIN * self.scale
-        self.square_size = chess.svg.SQUARE_SIZE * self.scale
+        self.square_size = SVG_SQUARE_SIZE * self.scale
         self.board_pos = [(i - self.board_size) / 2 for i in size]
         self.xyo = [i + self.margin for i in self.board_pos]
 
