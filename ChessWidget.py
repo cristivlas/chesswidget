@@ -30,9 +30,9 @@ class ChessWidget(Widget):
     def on_touch_down(self, touch):
         x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
         if 0 <= x < 8 and 0 <= y < 8:
+            x, y = int(x), int(y)
             if self.flip:
-                x = 8 - x
-                y = 8 - y
+                x, y  = 7 - x, 7 - y
             move = 'abcdefgh'[int(x)] + str(1 + int(y))
             self.move += move
             if len(self.move) < 4:
@@ -97,7 +97,7 @@ class ChessWidget(Widget):
         w, h = 2*[self.square_size]
         for i, pos in enumerate([move[i:i+2] for i in range(0, min(4, len(move)), 2)]):
             x, y = [j for j in self.screen_coords(*pos)]
-            self.highlight_area(group, i, x, y, w+1, h+1)
+            self.highlight_area(group, i, x, y, w, h)
         if self.canvas.indexof(group) < 0:
             self.canvas.add(group)
         if group.children:

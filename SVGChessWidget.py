@@ -31,6 +31,8 @@ class SVGChessWidget(ChessWidget):
 
     def highlight_area(self, group, i, x, y, w, h):
         color = ['#aaa23b', '#cdd16a']
+        # draw the rectangles just a tiny bit larger
+        x, y, w, h = x - 0.25, y - 0.25, w + 0.5, h + 0.5
         group.add(Color(*get_color_from_hex(color[i])))
         if group == self.selection:
             group.add(Line(points=[x, y, x+w, y, x+w, y+h, x, y+h, x, y], width=3))
