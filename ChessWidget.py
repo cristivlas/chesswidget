@@ -25,7 +25,7 @@ class ChessWidget(Widget):
         self.redraw()
 
     def set_model(self, board):
-        self.piece_map = board.piece_map
+        self.model = board
 
     def on_touch_down(self, touch):
         x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
@@ -46,6 +46,9 @@ class ChessWidget(Widget):
             else:
                 self.highlight_move(move)
                 self.move = move
+        else:
+            self.move = str()
+            self.highlight_move(self.move)
 
     def on_user_move(self, *_):
         pass
@@ -86,7 +89,7 @@ class ChessWidget(Widget):
             if move:
                 self.highlight_move(move.uci())
             size = 2 * [self.square_size]
-            for square, piece in self.piece_map().items():
+            for square, piece in self.model.piece_map().items():
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
                 Rectangle(pos=(xy), size=size, texture=self.piece_texture(piece))
