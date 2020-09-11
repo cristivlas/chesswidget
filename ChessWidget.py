@@ -27,6 +27,9 @@ class ChessWidget(Widget):
     def set_model(self, board):
         self.model = board
 
+    def inside(self, pos):
+        return all([i <= j < i+self.board_size-2*self.margin for i, j in zip(self.xyo, pos)])
+
     def on_touch_down(self, touch):
         x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
         if 0 <= x < 8 and 0 <= y < 8:
@@ -46,9 +49,6 @@ class ChessWidget(Widget):
             else:
                 self.highlight_move(move)
                 self.move = move
-        else:
-            self.move = str()
-            self.highlight_move(self.move)
 
     def on_user_move(self, *_):
         pass
