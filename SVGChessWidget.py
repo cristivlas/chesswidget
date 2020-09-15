@@ -3,7 +3,7 @@ from kivy.graphics import Color, Line, Rectangle
 from kivy.utils import get_color_from_hex
 
 from chesswidget.ChessWidget import ChessWidget
-import chess
+from chess import Piece
 import chess.svg
 import io
 
