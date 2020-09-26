@@ -1,5 +1,7 @@
-from kivy.graphics import Color, Rectangle, InstructionGroup
+from kivy.graphics import Color, Ellipse, Rectangle, InstructionGroup
 from kivy.uix.widget import Widget
+from kivy.utils import get_color_from_hex
+from chess import KING
 
 
 class ChessWidget(Widget):
@@ -92,6 +94,11 @@ class ChessWidget(Widget):
             for square, piece in self.model.copy().piece_map().items():
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
+                if piece.piece_type == KING:
+                    if self.model.attackers_mask(not piece.color, square):
+                        Color(*get_color_from_hex('#cd5b45f0'))
+                        Ellipse(pos=[i+1 for i in xy], size=[x-2 for x in size])
+                        Color(1,1,1,1)
                 Rectangle(pos=(xy), size=size, texture=self.piece_texture(piece))
 
     def highlight_move(self, move):
