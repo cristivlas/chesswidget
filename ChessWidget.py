@@ -19,12 +19,17 @@ class ChessWidget(Widget):
         self.highlight = InstructionGroup()
         self.clear_color = (1,1,1,1)
         self.flip = 0
+        self.check_indicator = True
 
     def rotate(self):
         self.flip ^= 1
         self.recalc(self.size)
         self.redraw_board()
         self.redraw()
+
+    def set_check_indicator(self, value):
+        self.check_indicator = value
+        self.redraw_pieces(None)
 
     def set_model(self, board):
         self.model = board
@@ -94,7 +99,7 @@ class ChessWidget(Widget):
             for square, piece in self.model.copy().piece_map().items():
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
-                if piece.piece_type == KING:
+                if self.check_indicator and piece.piece_type == KING:
                     if self.model.attackers_mask(not piece.color, square):
                         Color(*get_color_from_hex('#cd5b45f0'))
                         Ellipse(pos=[i+1 for i in xy], size=[x-2 for x in size])
