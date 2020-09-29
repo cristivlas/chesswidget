@@ -1,3 +1,4 @@
+"Utility to generate PNGs out fof chess.svg board & pieces"
 import chess
 import chess.svg
 import cairosvg
@@ -28,12 +29,13 @@ def gen_piece_atlas(name='pieces', dpi=72, size=72):
         json.dump({fname: atlas}, f)
 
 
-def gen_board_img(fname='board.png', dpi=72, square_size=72):
-    svg = chess.svg.board(board=None, size=8*square_size, flipped=True)
+def gen_board_img(fname='board.png', dpi=72, square_size=72, rotate=False):
+    svg = chess.svg.board(board=None, size=8*square_size, flipped=rotate)
     png = cairosvg.svg2png(bytestring=svg)
     Image.open(io.BytesIO(png)).save(fname, dpi=[dpi, dpi])
 
 
 if __name__ == '__main__':
+    #TODO: command line args
     gen_piece_atlas()
     gen_board_img()
