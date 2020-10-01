@@ -20,7 +20,7 @@ ANCHOR = { 'bottom': 0, 'center': 0.5, 'left': 0, 'right': 1, 'top': 1 }
 class SVGChessWidget(ChessWidget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.anchor = [ 'center', 'top' ]
+        self.anchor = [ 'center', 'center' ]
         self.piece_tex = {}
         self.board_tex = None
         self.margin = SVG_MARGIN
