@@ -14,10 +14,13 @@ except:
 
 SVG_MARGIN = 15.0
 SVG_SQUARE_SIZE = chess.svg.SQUARE_SIZE
+ANCHOR = { 'bottom': 0, 'center': 0.5, 'left': 0, 'right': 1, 'top': 1 }
+
 
 class SVGChessWidget(ChessWidget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.anchor = [ 'center', 'top' ]
         self.piece_tex = {}
         self.board_tex = None
         self.margin = SVG_MARGIN
@@ -58,7 +61,7 @@ class SVGChessWidget(ChessWidget):
         self.scale = self.board_size / (2 * SVG_MARGIN + 8 * SVG_SQUARE_SIZE)
         self.margin = SVG_MARGIN * self.scale
         self.square_size = SVG_SQUARE_SIZE * self.scale
-        self.board_pos = [(i - self.board_size) / 2 for i in size]
+        self.board_pos = [(i - self.board_size) * ANCHOR[j] for i, j in zip(self.parent.size, self.anchor)]
         self.xyo = [i + self.margin for i in self.board_pos]
 
     def rotate(self):
