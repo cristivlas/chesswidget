@@ -18,7 +18,7 @@ class ChessWidget(Widget):
         self.highlight = InstructionGroup()
         self.clear_color = (1,1,1,1)
         self.flip = 0
-        self.threat_indicator = True
+        self.threat_indicator = False
 
     def rotate(self):
         self.flip ^= 1
