@@ -8,7 +8,6 @@ class ChessWidget(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.bind(size = self.on_size)
-        self.bind(size = lambda *_: self.redraw())
         self.board_pos = None
         self.square_size = None
         self.xyo = [0, 0]   # xy origin for squares (not the board, which may include coords)
@@ -56,6 +55,8 @@ class ChessWidget(Widget):
     def on_size(self, _, size):
         self.recalc(size)
         self.redraw_board()
+        if size != self.size:
+            self.redraw()
 
     def update(self, move):
         self.redraw(move)
