@@ -16,12 +16,13 @@ class ChessWidget(Widget):
         self.highlight = InstructionGroup()
         self.clear_color = (1,1,1,1)
         self.flip = 0
+        self.last_move = None
 
     def rotate(self):
         self.flip ^= 1
         self.recalc(self.size)
         self.redraw_board()
-        self.redraw()
+        self.redraw(self.last_move)
 
     def set_model(self, board):
         self.model = board
@@ -55,11 +56,11 @@ class ChessWidget(Widget):
     def on_size(self, _, size):
         self.recalc(size)
         self.redraw_board()
-        if size != self.size:
-            self.redraw()
+        self.redraw(self.last_move)
 
     def update(self, move):
         self.redraw(move)
+        self.last_move = move
 
     def board_texture(self):
         pass
