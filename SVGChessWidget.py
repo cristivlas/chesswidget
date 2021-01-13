@@ -34,14 +34,13 @@ class SVGChessWidget(ChessWidget):
 
     def highlight_area(self, group, i, x, y, w, h):
         color = ['#aaa23b', '#cdd16a']
-        # draw the rectangles just a tiny bit larger
-        x, y, w, h = x - 0.5, y - 0.5, w + 1, h + 1
         group.add(Color(*get_color_from_hex(color[i])))
         if group == self.selection:
             group.add(Line(points=[x, y, x+w, y, x+w, y+h, x, y+h, x, y], width=3))
         else:
             assert group == self.highlight
-            group.add(Rectangle(pos=(x, y), size=(w, h)))
+            lw = self.grid_line_width
+            group.add(Rectangle(pos=(x+lw, y+lw), size=(w-2*lw, h-2*lw)))
 
     def gen_texture(self, piece):
         size = self.square_size

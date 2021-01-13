@@ -1,4 +1,4 @@
-from kivy.graphics import Color, Ellipse, Rectangle, InstructionGroup
+from kivy.graphics import Color, Ellipse, Rectangle, InstructionGroup, Line
 from kivy.uix.widget import Widget
 
 
@@ -9,6 +9,7 @@ class ChessWidget(Widget):
         super().__init__(**kwargs)
         self.bind(size = self.on_size)
         self.board_pos = None
+        self.margin = None
         self.square_size = None
         self.xyo = [0, 0]   # xy origin for squares (not the board, which may include coords)
         self.move = str()   # pending move, uci notation
@@ -17,6 +18,8 @@ class ChessWidget(Widget):
         self.clear_color = (1,1,1,1)
         self.flip = 0
         self.last_move = None
+        self.grid_line_width = 1.25
+        self.grid_color = (0,0,0,1)
 
     def rotate(self):
         self.flip ^= 1
@@ -81,9 +84,20 @@ class ChessWidget(Widget):
     def redraw_board(self):
         self.canvas.before.clear()
         with self.canvas.before:
-            Color(*self.clear_color)
-            Rectangle(pos=self.board_pos, size=2*[self.board_size])
             Rectangle(pos=self.board_pos, size=2*[self.board_size], texture=self.board_texture())
+            self.redraw_grid()
+
+    def redraw_grid(self):
+        Color(*self.grid_color)
+        y = self.board_pos[1]+self.margin
+        for i in range(9):
+            x = self.board_pos[0] + self.margin + self.square_size * i
+            Line(points=[x, y, x, y + 8*self.square_size], width=self.grid_line_width)
+        x = self.board_pos[0]+self.margin
+        for i in range(9):
+            y = self.board_pos[1] + self.margin + self.square_size * i
+            Line(points=[x, y, x + 8*self.square_size, y], width=self.grid_line_width)
+        Color(*self.clear_color)
 
     def redraw_pieces(self, move):
         self.canvas.clear()

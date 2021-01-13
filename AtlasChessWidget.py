@@ -19,9 +19,7 @@ class AtlasChessWidget(SVGChessWidget):
         self.atlas = Atlas(self.atlas)
 
     def board_texture(self):
-        if self.board_tex is None:
-            self.board_tex = CoreImage(self.board + '-{}.png'.format(self.flip)).texture
-        return self.board_tex
+        pass
 
     def rotate(self):
         self.board_tex = None
