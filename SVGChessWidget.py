@@ -32,12 +32,14 @@ class SVGChessWidget(ChessWidget):
             self.board_tex = CoreImage(io.BytesIO(png), ext='png', dpi=72).texture
         return self.board_tex
 
-    def highlight_area(self, group, i, x, y, w, h):
-        color = ['#aaa23b', '#cdd16a']
-        group.add(Color(*get_color_from_hex(color[i])))
+    # select (draw a rectangle around square) or hilight (fill square with color)
+    def highlight_area(self, group, i, x, y, w, h):        
         if group == self.selection:
+            group.add(Color(*get_color_from_hex('#1a4501')))
             group.add(Line(points=[x, y, x+w, y, x+w, y+h, x, y+h, x, y], width=3))
         else:
+            color = ['#aaa23b', '#cdd16a']
+            group.add(Color(*get_color_from_hex(color[i])))
             assert group == self.highlight
             lw = self.grid_line_width
             group.add(Rectangle(pos=(x+lw, y+lw), size=(w-2*lw, h-2*lw)))
