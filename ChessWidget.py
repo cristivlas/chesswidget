@@ -20,6 +20,8 @@ class ChessWidget(Widget):
         self.last_move = None
         self.grid_line_width = 1.25
         self.grid_color = (0,0,0,1)
+        # coordinates of most recently highlighted square, in screen coordinates
+        self.highlight_pos = (0,0)
 
     def rotate(self):
         self.flip ^= 1
@@ -119,6 +121,7 @@ class ChessWidget(Widget):
         w, h = 2*[self.square_size]
         for i, pos in enumerate([move[i:i+2] for i in range(0, min(4, len(move)), 2)]):
             x, y = [j for j in self.screen_coords(*pos)]
+            self.highlight_pos = x+w/2, y+h/2
             self.highlight_area(group, i, x, y, w, h)
         if self.canvas.indexof(group) < 0:
             self.canvas.add(group)

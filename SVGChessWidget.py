@@ -33,7 +33,7 @@ class SVGChessWidget(ChessWidget):
         return self.board_tex
 
     # select (draw a rectangle around square) or hilight (fill square with color)
-    def highlight_area(self, group, i, x, y, w, h):        
+    def highlight_area(self, group, i, x, y, w, h):
         if group == self.selection:
             group.add(Color(*get_color_from_hex('#808000')))
             group.add(Line(points=[x, y, x+w, y, x+w, y+h, x, y+h, x, y], width=3))
