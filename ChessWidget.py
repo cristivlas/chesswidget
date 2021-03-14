@@ -31,6 +31,7 @@ class ChessWidget(Widget):
 
     def set_model(self, board):
         self.model = board
+        self.last_move = None
 
     def inside(self, pos):
         return all([i <= j < i+self.board_size-2*self.margin for i, j in zip(self.xyo, pos)])
@@ -113,7 +114,7 @@ class ChessWidget(Widget):
                 self.redraw_one_piece(piece, square, xy, size)
 
     def redraw_one_piece(self, piece, square, xy, size):
-        Rectangle(pos=(xy), size=size, texture=self.piece_texture(piece))
+        Rectangle(pos=xy, size=size, texture=self.piece_texture(piece))
 
     def highlight_move(self, move):
         group = self.highlight if len(move) >= 4 else self.selection
