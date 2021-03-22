@@ -102,13 +102,14 @@ class ChessWidget(Widget):
             Line(points=[x, y, x + 8*self.square_size, y], width=self.grid_line_width)
         Color(*self.clear_color)
 
-    def redraw_pieces(self, move):
+    def redraw_pieces(self, move, board=None):
+        board = board or self.model
         self.canvas.clear()
         with self.canvas:
             if move:
                 self.highlight_move(move.uci())
             size = 2 * [self.square_size]
-            for square, piece in self.model.piece_map().items():
+            for square, piece in board.piece_map().items():
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
                 self.redraw_one_piece(piece, square, xy, size)
