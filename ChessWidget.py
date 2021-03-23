@@ -103,6 +103,8 @@ class ChessWidget(Widget):
         Color(*self.clear_color)
 
     def redraw_pieces(self, move, board=None):
+        if not self.square_size: # not recalc-ed yet
+            return
         board = board or self.model
         self.canvas.clear()
         with self.canvas:
@@ -131,6 +133,7 @@ class ChessWidget(Widget):
             group.add(Color(*self.clear_color))
 
     def screen_coords(self, col, row):
+        assert self.square_size
         if isinstance(col, str):
             assert col in 'abcdefgh'    # expect file-rank
             assert int(row) in range(1, 9)
