@@ -103,11 +103,13 @@ class ChessWidget(Widget):
             Line(points=[x, y, x + 8*self.square_size, y], width=self.grid_line_width)
         Color(*self.clear_color)
 
-    def redraw_pieces(self, move, board=None):
+    def redraw_pieces(self, move, board=None, overlay=False, scale=1):
         if not self.square_size: # not recalc-ed yet
             return
         board = board or self.model
-        self.canvas.clear()
+        scale=min(scale, 1)
+        if not overlay:
+            self.canvas.clear()
         with self.canvas:
             if move:
                 self.highlight_move(move.uci())
@@ -115,7 +117,9 @@ class ChessWidget(Widget):
             for square, piece in board.piece_map().items():
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
-                self.redraw_one_piece(piece, square, xy, size)
+                if overlay:
+                    xy=[i+(1-scale)*j for i, j in zip(xy, size)]
+                self.redraw_one_piece(piece, square, xy, [s * scale for s in size])
 
     def redraw_one_piece(self, piece, square, xy, size):
         Rectangle(pos=xy, size=size, texture=self.piece_texture(piece))
