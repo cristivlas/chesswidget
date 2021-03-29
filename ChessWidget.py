@@ -85,10 +85,11 @@ class ChessWidget(Widget):
             self.redraw_pieces(move)
 
     def redraw_board(self):
-        self.canvas.before.clear()
-        with self.canvas.before:
-            Rectangle(pos=self.board_pos, size=2*[self.board_size], texture=self.board_texture())
-            self.redraw_grid()
+        if self.board_pos and self.board_size:
+            self.canvas.before.clear()
+            with self.canvas.before:
+                Rectangle(pos=self.board_pos, size=2*[self.board_size], texture=self.board_texture())
+                self.redraw_grid()
 
     def redraw_grid(self):
         Color(*self.grid_color)
