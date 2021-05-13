@@ -37,15 +37,11 @@ class ChessWidget(Widget):
         return all([i <= j < i+self.board_size-2*self.margin for i, j in zip(self.xyo, pos)])
 
     def on_touch_down(self, touch):
-        x,y = [(i - j) / self.square_size for i, j in zip(touch.pos, self.xyo)]
-        if 0 <= x < 8 and 0 <= y < 8:
-            x, y = int(x), int(y)
-            if self.flip:
-                x, y  = 7 - x, 7 - y
-            move = 'abcdefgh'[int(x)] + str(1 + int(y))
-            self.move += move
+        square = self.square_name_from_coords(touch.pos)
+        if square:
+            self.move += square
             if len(self.move) < 4:
-                self.highlight_move(move)
+                self.highlight_move(square)
             # click on a selected square? deselect it
             elif self.move[:2] == self.move[2:]:
                 self.move = str()
@@ -53,8 +49,8 @@ class ChessWidget(Widget):
             elif self.dispatch('on_user_move', self.move):
                 self.move = str()
             else:
-                self.highlight_move(move)
-                self.move = move
+                self.highlight_move(square)
+                self.move = square
 
     def on_user_move(self, *_):
         pass
@@ -148,3 +144,10 @@ class ChessWidget(Widget):
             row = 7 - row
         return [o + i * self.square_size for o, i in zip(self.xyo, [col, row])]
 
+    def square_name_from_coords(self, pos):
+        x,y = [(i - j) / self.square_size for i, j in zip(pos, self.xyo)]
+        if 0 <= x < 8 and 0 <= y < 8:
+            x, y = int(x), int(y)
+            if self.flip:
+                x, y  = 7 - x, 7 - y
+            return 'abcdefgh'[int(x)] + str(1 + int(y))
