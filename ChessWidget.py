@@ -1,4 +1,5 @@
-from kivy.graphics import Color, Ellipse, Rectangle, InstructionGroup, Line
+from kivy.clock import Clock
+from kivy.graphics import Color, Ellipse, InstructionGroup, Line, Rectangle
 from kivy.uix.widget import Widget
 
 
@@ -22,6 +23,12 @@ class ChessWidget(Widget):
         self.grid_color = (0,0,0,1)
         # coordinates of most recently highlighted square, in screen coordinates
         self.highlight_pos = (0,0)
+        self.long_press_event = None
+
+    def cancel_long_press(self, *_):
+        if self.long_press_event:
+            self.long_press_event.cancel()
+            self.long_press_event = None
 
     def rotate(self):
         self.flip ^= 1
@@ -36,8 +43,26 @@ class ChessWidget(Widget):
     def inside(self, pos):
         return all([i <= j < i+self.board_size-2*self.margin for i, j in zip(self.xyo, pos)])
 
+    def on_long_press(self, touch):
+        pass
+
     def on_touch_down(self, touch):
-        square = self.square_name_from_coords(touch.pos)
+        if self.inside(touch.pos):
+            self.long_press_event = Clock.schedule_once(lambda *_: self.on_long_press(touch), 1)
+
+    def on_touch_up(self, touch):
+        self.cancel_long_press(touch)
+        self._select_square(self._square_name_from_coords(touch.pos))
+
+    def on_user_move(self, *_):
+        pass
+
+    def on_size(self, _, size):
+        self.recalc(size)
+        self.redraw_board()
+        self.redraw(self.last_move)
+
+    def _select_square(self, square):
         if square:
             self.move += square
             if len(self.move) < 4:
@@ -51,14 +76,6 @@ class ChessWidget(Widget):
             else:
                 self.highlight_move(square)
                 self.move = square
-
-    def on_user_move(self, *_):
-        pass
-
-    def on_size(self, _, size):
-        self.recalc(size)
-        self.redraw_board()
-        self.redraw(self.last_move)
 
     def update(self, move):
         self.redraw(move)
@@ -144,7 +161,7 @@ class ChessWidget(Widget):
             row = 7 - row
         return [o + i * self.square_size for o, i in zip(self.xyo, [col, row])]
 
-    def square_name_from_coords(self, pos):
+    def _square_name_from_coords(self, pos):
         x,y = [(i - j) / self.square_size for i, j in zip(pos, self.xyo)]
         if 0 <= x < 8 and 0 <= y < 8:
             x, y = int(x), int(y)
