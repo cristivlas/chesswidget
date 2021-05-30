@@ -55,7 +55,7 @@ class ChessWidget(Widget):
         self._select_square(self._square_name_from_coords(touch.pos))
 
     def on_user_move(self, *_):
-        pass
+        self.move = str()
 
     def on_size(self, _, size):
         self.recalc(size)

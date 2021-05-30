@@ -58,6 +58,7 @@ class SVGChessWidget(ChessWidget):
         return tex
 
     def recalc(self, size):
+        self.selection.clear()
         self.board_size = min(size)
         self.scale = self.board_size / (2 * SVG_MARGIN + 8 * SVG_SQUARE_SIZE)
         self.margin = SVG_MARGIN * self.scale
