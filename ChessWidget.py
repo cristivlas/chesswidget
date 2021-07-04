@@ -41,7 +41,8 @@ class ChessWidget(Widget):
         self.last_move = None
 
     def inside(self, pos):
-        return all([i <= j < i+self.board_size-2*self.margin for i, j in zip(self.xyo, pos)])
+        board_size = self.board_size - 2 * self.margin
+        return all([x >= x0 and x <= x0 + board_size for x, x0 in zip(pos, self.xyo)])
 
     def on_long_press(self, touch):
         pass
