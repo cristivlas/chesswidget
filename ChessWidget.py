@@ -2,6 +2,8 @@ from kivy.clock import Clock
 from kivy.graphics import Color, Ellipse, InstructionGroup, Line, Rectangle
 from kivy.uix.widget import Widget
 
+from chess import scan_forward
+
 
 class ChessWidget(Widget):
     __events__ = ('on_user_move',)
@@ -121,18 +123,22 @@ class ChessWidget(Widget):
         if not self.square_size: # not recalc-ed yet
             return
         board = board or self.model
-        scale=min(scale, 1)
+        scale = min(scale, 1)
         if not overlay:
             self.canvas.clear()
         with self.canvas:
             if move:
                 self.highlight_move(move.uci())
             size = 2 * [self.square_size]
-            for square, piece in board.piece_map().items():
+
+            for square in scan_forward(board.occupied):
+                piece = board.piece_at(square)
+                if piece is None:
+                    continue
                 col, row = square % 8, square // 8
                 xy = self.screen_coords(col, row)
                 if overlay:
-                    xy=[i+(1-scale)*j for i, j in zip(xy, size)]
+                    xy = [i+(1-scale)*j for i, j in zip(xy, size)]
                 self.redraw_one_piece(piece, square, xy, [s * scale for s in size])
 
     def redraw_one_piece(self, piece, square, xy, size):
