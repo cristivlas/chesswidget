@@ -1,11 +1,13 @@
 from kivy.clock import Clock
-from kivy.graphics import Color, Ellipse, InstructionGroup, Line, Rectangle
+from kivy.graphics import Color, InstructionGroup, Line, Rectangle
+from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
 
 from chess import scan_forward
 
 
 class ChessWidget(Widget):
+    long_press_delay = NumericProperty(1)
     __events__ = ('on_user_move',)
 
     def __init__(self, **kwargs):
@@ -51,7 +53,10 @@ class ChessWidget(Widget):
 
     def on_touch_down(self, touch):
         if self.inside(touch.pos):
-            self.long_press_event = Clock.schedule_once(lambda *_: self.on_long_press(touch), 1)
+            self.long_press_event = Clock.schedule_once(
+                lambda *_: self.on_long_press(touch),
+                self.long_press_delay
+            )
 
     def on_touch_up(self, touch):
         self.cancel_long_press(touch)
