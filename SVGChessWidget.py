@@ -58,13 +58,14 @@ class SVGChessWidget(ChessWidget):
         return tex
 
     def recalc(self, size):
-        self.selection.clear()
-        self.board_size = min(size)
-        self.scale = self.board_size / (2 * SVG_MARGIN + 8 * SVG_SQUARE_SIZE)
-        self.margin = SVG_MARGIN * self.scale
-        self.square_size = SVG_SQUARE_SIZE * self.scale
-        self.board_pos = [(i - self.board_size) * ANCHOR[j] for i, j in zip(self.parent.size, self.anchor)]
-        self.xyo = [i + self.margin for i in self.board_pos]
+        if self.parent:
+            self.selection.clear()
+            self.board_size = min(size)
+            self.scale = self.board_size / (2 * SVG_MARGIN + 8 * SVG_SQUARE_SIZE)
+            self.margin = SVG_MARGIN * self.scale
+            self.square_size = SVG_SQUARE_SIZE * self.scale
+            self.board_pos = [(i - self.board_size) * ANCHOR[j] for i, j in zip(self.parent.size, self.anchor)]
+            self.xyo = [i + self.margin for i in self.board_pos]
 
     def rotate(self):
         self.board_tex = None

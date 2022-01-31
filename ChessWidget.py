@@ -109,6 +109,7 @@ class ChessWidget(Widget):
         if self.board_pos and self.board_size:
             self.canvas.before.clear()
             with self.canvas.before:
+                Color(1,1,1,1)
                 Rectangle(pos=self.board_pos, size=2*[self.board_size], texture=self.board_texture())
                 self.redraw_grid()
 
