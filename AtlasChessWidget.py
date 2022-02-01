@@ -14,7 +14,7 @@ class AtlasChessWidget(SVGChessWidget):
         dir = path.dirname(sys.argv[0])
         if not path.isabs(self.atlas):
             self.atlas = path.join(dir, self.atlas)
-        if not path.isabs(self.board):
+        if self.board and not path.isabs(self.board):
             self.board = path.join(dir, self.board)
         self.atlas = Atlas(self.atlas)
 

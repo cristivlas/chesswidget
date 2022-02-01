@@ -1,14 +1,21 @@
 from kivy.clock import Clock
 from kivy.graphics import Color, InstructionGroup, Line, Rectangle
-from kivy.properties import NumericProperty
+from kivy.metrics import *
+from kivy.properties import *
 from kivy.uix.widget import Widget
 
 from chess import scan_forward
 
 
 class ChessWidget(Widget):
-    long_press_delay = NumericProperty(1)
+
     __events__ = ('on_user_move',)
+
+    grid_line_width = NumericProperty(sp(1.25))
+    grid_color = ColorProperty((0,0,0,1))
+
+    long_press_delay = NumericProperty(1)
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -23,8 +30,6 @@ class ChessWidget(Widget):
         self.clear_color = (1,1,1,1)
         self.flip = 0
         self.last_move = None
-        self.grid_line_width = 1.25
-        self.grid_color = (0,0,0,1)
         # coordinates of most recently highlighted square, in screen coordinates
         self.highlight_pos = (0,0)
         self.long_press_event = None
