@@ -21,6 +21,7 @@ class ChessWidget(Widget):
         super().__init__(**kwargs)
         self.bind(size = self.on_size)
         self.board_pos = None
+        self.board_size = 0
         self.margin = None
         self.square_size = None
         self.xyo = [0, 0]   # xy origin for squares (not the board, which may include coords)
