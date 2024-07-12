@@ -1,7 +1,7 @@
 from kivy.atlas import Atlas
 from kivy.core.image import Image as CoreImage
 from chesswidget.SVGChessWidget import SVGChessWidget
-from os import path
+from os import getcwd, path
 
 import chess
 import sys
@@ -11,7 +11,8 @@ class AtlasChessWidget(SVGChessWidget):
     def set_textures(self, atlas, board):
         self.atlas = atlas + '.atlas'
         self.board = board
-        dir = path.dirname(sys.argv[0])
+        #dir = path.dirname(sys.argv[0])
+        dir = getcwd()
         if not path.isabs(self.atlas):
             self.atlas = path.join(dir, self.atlas)
         if self.board and not path.isabs(self.board):
